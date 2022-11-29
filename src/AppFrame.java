@@ -25,7 +25,7 @@ public class AppFrame extends JFrame {
         add(gamePanel);
         add(sidePanel);
         setupMenuBar();
-        setBounds(100, 100, picture.getSize()+200, picture.getSize() + 60);
+        setBounds(100, 100, picture.getSize()+400, picture.getSize() + 60);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);

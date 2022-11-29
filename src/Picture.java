@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.util.Vector;
 
 public class Picture {
-    private final int imgSize = 800;
+    private final int imgSize = 600;
     private BufferedImage picture;
     private Vector<Vector<BufferedImage>> cells;
     private int n;
