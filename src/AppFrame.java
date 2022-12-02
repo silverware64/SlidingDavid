@@ -29,6 +29,7 @@ public class AppFrame extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);
+        MusicPlayer.playBGmusic();
 
         // Saves the score on close.
         addWindowListener(new WindowAdapter() {
