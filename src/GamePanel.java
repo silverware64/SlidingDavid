@@ -112,6 +112,10 @@ public class GamePanel extends JPanel {
     }
 
     private boolean validMove(Point start, Point dest) {
+        System.out.println("Start:");
+        System.out.println(start);
+        System.out.println("Empty:");
+        System.out.println(dest);
         // Not in game phase.
         if (gameState != 2)
             return false;
@@ -132,6 +136,10 @@ public class GamePanel extends JPanel {
         // Left & right.
         if (Math.abs(start.y - dest.y) == 1) {
             return Math.abs(start.x - dest.x) <= 0;
+        }
+
+        if ((Math.abs(dest.y - start.y) > 1) || (Math.abs(dest.x - start.x) > 1)){
+            return false;
         }
         return true;
     }
