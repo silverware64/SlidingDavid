@@ -4,6 +4,7 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Vector;
 
 public class SidePanel extends JPanel {
     private final GamePanel gamePanel;
@@ -11,6 +12,7 @@ public class SidePanel extends JPanel {
     private JLabel currentScore;
     private JLabel lastScore;
     private JLabel hsText;
+    private JLabel hintText;
     private JLabel hsScore;
     private JLabel diff;
     private JRadioButton buttonEasy;
@@ -34,6 +36,7 @@ public class SidePanel extends JPanel {
         setupDifficultyButtons();
         setupStartResetButtons();
         updateScoreText();
+        setupHintUI();
         timeController = new TimeController(this.gamePanel, this, currentScore);
     }
 
@@ -105,6 +108,19 @@ public class SidePanel extends JPanel {
         buttonNormal.setSelected(true);
     }
 
+    private void setupHintUI() {
+        JButton buttonHint = new JButton("Hint");
+        buttonHint.setBounds(10, 200, 80, 20);
+        add(buttonHint);
+        buttonHint.setEnabled(true);
+        buttonHint.addActionListener(e -> {
+            updateHintText(gamePanel.getHint(hintText.getText()));
+        });
+        hintText = new JLabel("");
+        hintText.setBounds(10, 205, 100, 50);
+        hintText.setFont(new Font("Arial", Font.PLAIN, hintText.getFont().getSize()));
+        add(hintText);
+    }
     private void setupStartResetButtons() {
         buttonStart = new JButton("Start");
         buttonStart.setBounds(30, 530, 100, 30);
@@ -132,7 +148,29 @@ public class SidePanel extends JPanel {
         gamePanel.setGameState(1);
         settingsPhase();
     }
-
+    private void updateHintText(Vector<Integer> manhattanScores){
+        if (gamePanel.getGameState() != 2)
+            return;
+        String[] moves = {"Up", "Down", "Left", "Right"};
+        String newHint = "There are no good moves";
+        int minIndex = 0;
+        int minManhattan = 10000;
+        for (int i = 0; i < 4; i++){
+            if (manhattanScores.get(i) == null){}
+            else if (manhattanScores.get(i) < minManhattan) {
+                minManhattan = manhattanScores.get(i);
+                newHint = moves[i];
+                minIndex = i;
+            }
+        }
+        for (int i = 0; i < 4; i++){
+            if (manhattanScores.get(i) == null){}
+            else if (manhattanScores.get(i) == minManhattan && (i != minIndex)) {
+                newHint = newHint + " or " + moves[i];
+            }
+        }
+        hintText.setText(newHint);
+    }
     private void updateScoreText() {
         hsText.setText("Highscore(" + getSelectedDifficulty() + "x" + getSelectedDifficulty() + "):");
         hsScore.setText(Scores.getHighScore(getSelectedDifficulty()));
