@@ -7,7 +7,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class AppFrame extends JFrame {
     private final SidePanel sidePanel;
@@ -44,7 +47,6 @@ public class AppFrame extends JFrame {
 
     private void setupMenuBar(){
         JMenuBar menuBar = new JMenuBar();
-
         JMenu menuFile = new JMenu("File");
         JMenuItem menuFileLoad = new JMenuItem("Load");
         menuFileLoad.addActionListener(e -> {
@@ -79,6 +81,48 @@ public class AppFrame extends JFrame {
         });
         menuView.add(menuViewFullImage);
         menuBar.add(menuView);
+        /*
+         * This checks if an insane score of 30mins or less has been achieved
+         * if so, then a new, secret menu option is added.
+        */
+        if (insaneScore()) {
+            JMenu menuSecret = new JMenu("Secret");
+            JMenuItem menuSecretUnlock = new JMenuItem("Secret Unlock");
+            menuSecretUnlock.addActionListener(e -> {
+                try{
+                    picture.setImg(ImageIO.read(new File("Images/secret_unlock.jpg")));
+                    sidePanel.imgLoaded();
+                } catch (IOException exc){
+                    exc.printStackTrace();
+                }
+            });
+            menuSecret.add(menuSecretUnlock);
+            menuBar.add(menuSecret);
+        }
+
         setJMenuBar(menuBar);
+    }
+
+    /**
+     * This function checks for an insane score of 30 mins or less
+     */
+    private Boolean insaneScore(){
+        File input = new File("scores10.txt");
+        try {
+            Scanner scanner = new Scanner(input);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String[] score = line.split(":");
+                if (score[0].equals("0")){
+                    if (Integer.parseInt(score[1]) <= 30){
+                        return true;
+                    }
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
