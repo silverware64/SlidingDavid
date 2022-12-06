@@ -321,6 +321,7 @@ public class GamePanel extends JPanel {
 
                     if (validMove(start, dest)) {
                         swapCells(start, dest);
+                        empty_cell = start;
                         MusicPlayer.playMoveSFX();
                         repaint();
                     }
