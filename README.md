@@ -20,3 +20,20 @@ options or themes for your wow factor!
 - There must be a minimum of nine tile spaces - consider adding multiple difficulty options
 with varying grid sizes!
 - Game win/replay/restart logic
+
+## Permutation Logic, and Why Our Puzzle is Solvable.
+- Permutation Fact: Using swaps, going from Permutation A to Permutation B either takes an
+even number about of swaps, or an odd number of swaps. If a Permutation can be reached with an
+even number of swaps, it can ONLY be reached with an even number of swaps. The same is true for a
+Permutation requiring an odd number of swaps.
+- The generatePuzzle() function within GamePanel.java creates an 2D-array of ints, NxN. Then
+it randomly swaps 100 elements within that 2-D array. Therefore, we know our solution will
+require an even number of swaps.
+- Making a swap within the puzzle requires moving the "blank" space either up, down, left, or right.
+Therefore, n = u+d+l+r, where n is the number of moves, and u,d,l,r represent their respective number of moves.
+Our blank space starts in the bottom right, and it must end in the bottom right for the solution.
+That means that we must make the same number of left moves as right moves, and the same number of
+up moves as down moves. Therefore, l=r, and u=d, and we can simplify our equation above to,
+    n = 2u + 2l, or n = 2(u+l). That means n is even, and our puzzle can be solved.
+- TLDR, Our puzzle is solvable because we swap the original an even amount of times(var nrOfSwaps), and the
+blank is in the same place in both the start and solution.
