@@ -169,8 +169,6 @@ public class GamePanel extends JPanel {
                     cur = (n * n - 1);
                 homeX = cur / n;
                 homeY = cur % n;
-                System.out.println("This is the manhattan score being summed: ");
-                System.out.println(manhattan);
                 manhattan = manhattan + Math.abs((homeX - i) + (homeY - j));
             }
         }
