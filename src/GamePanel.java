@@ -1,12 +1,18 @@
-/*
-    Name: GamePanel.java
+/**
+ * GamePanel.java
+ * by Tobin Nickels,
+ *
+ * This class is responsible for game logic, event listeners, and displaying graphics of the tiles.
  */
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -14,8 +20,17 @@ public class GamePanel extends JPanel {
     private final Picture picture;
     private final int nrOfSwaps = 100;
     Vector<Vector<Integer>> cells;
+    private Point empty_cell;
     private int n, step;
     private int startX, startY;
+
+    private KeyAdapter keyboard_controls;
+    private MouseAdapter mouse_controls;
+    private boolean use_keyboard = false;
+    private int left_key = 37;
+    private int up_key = 38;
+    private int right_key = 39;
+    private int down_key = 40;
 
     /*
         0 = No image
@@ -25,19 +40,62 @@ public class GamePanel extends JPanel {
      */
     private int gameState = 0;
 
+    /**
+     * Initialize GamePanel with correct size.
+     *
+     * @param p
+     *      Reference to a picture object with no Image yet.
+     */
     public GamePanel(Picture p) {
         picture = p;
         setBounds(0, 0, picture.getSize(), picture.getSize());
+        setFocusable(true);
     }
 
+    /**
+     *
+     * @return
+     *      Int representing current game state.
+     */
     public int getGameState() {
         return this.gameState;
     }
 
+    /**
+     *
+     * @param state
+     *      Change game state to given state.
+     */
     public void setGameState(int state) {
         this.gameState = state;
     }
 
+    /**
+     * Bind moving the tiles to different custom keys.
+     *
+     * @param direction
+     *      Which direction to rebind
+     * @param key
+     *      Key to bind it to.
+     */
+    public void setDirection(String direction, int key){
+        if(direction.equals("left")){
+            left_key = key;
+        } else if (direction.equals("up")) {
+            up_key = key;
+        } else if (direction.equals("right")) {
+            right_key = key;
+        } else if (direction.equals("down")) {
+            down_key = key;
+        }
+    }
+
+    /**
+     * Split image into "cells" and start the game.
+     *
+     * @param difficulty
+     *      Int representing the dimensions of the puzzle or "difficulty".
+     */
     public void startGame(int difficulty) {
         gameState = 2;
         this.n = difficulty;
@@ -72,9 +130,10 @@ public class GamePanel extends JPanel {
             cells.set(i, new Vector<>());
             cells.get(i).setSize(n);
             for (int j = 0; j < n; j++) {
-                if (i == n - 1 && j == n - 1)
+                if (i == n - 1 && j == n - 1){
                     cells.get(i).set(j, -1);
-                else {
+                    empty_cell = new Point(j,i);
+            } else {
                     cells.get(i).set(j, randomizer.get(next));
                     next++;
                 }
@@ -174,33 +233,105 @@ public class GamePanel extends JPanel {
         }
         return manhattan;
     }
+
+    /**
+     * Remove mouse listener if one exists and set parameter representing if keyboard commands will be used.
+     */
+    public void turnOnKeyboard(){
+        if(mouse_controls != null){
+            removeMouseListener(mouse_controls);
+        }
+        use_keyboard = true;
+        if(gameState == 2)
+            gamePhase();
+    }
+
+    /**
+     * Remove key listener if one exists and set parareter representing keyboard commands won't be used.
+     */
+    public void turnOnMouse(){
+        if (keyboard_controls != null){
+            removeKeyListener(keyboard_controls);
+        }
+        use_keyboard = false;
+        if(gameState == 2)
+            gamePhase();
+    }
+
+
+    /**
+     * Create new key or mouse listener based on settings.
+     * This method holds the actual gameplay of SlidingDavid.
+     */
     private void gamePhase() {
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mouseClicked(e);
+        requestFocus();
+        if(use_keyboard){
+              keyboard_controls = new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    Point start = new Point(startX, startY);
 
-                startX = e.getX();
-                startY = e.getY();
-            }
+                    //Try to swap the empty tile with an adjacent tile based on
+                    //the pressed key.
+                    if (e.getKeyCode() == left_key){
+                        start = new Point(empty_cell.x,empty_cell.y+1);
+                    }
+                    if (e.getKeyCode() == up_key){
+                        start = new Point(empty_cell.x+1,empty_cell.y);
+                    }
+                    if (e.getKeyCode() == right_key){
+                        start = new Point(empty_cell.x,empty_cell.y-1);
+                    }
+                    if (e.getKeyCode() == down_key){
+                        start = new Point(empty_cell.x-1,empty_cell.y);
+                    }
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
+                    if (validMove(start, empty_cell)) {
+                        swapCells(start, empty_cell);
+                        empty_cell = start;
+                        MusicPlayer.playMoveSFX();
+                        repaint();
+                    }
 
-                Point start = coordToCell(new Point(startX, startY));
-                Point dest = coordToCell(new Point(e.getX(), e.getY()));
+                    if(gameOver()){
+                        gameState = 3;
+                    }
+                    startX = -1;
+                    startY = -1;
+                    requestFocus();
+                }
+            };
+              addKeyListener(keyboard_controls);
+        } else {
+            mouse_controls = new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mouseClicked(e);
 
-                if (validMove(start, dest)) {
-                    swapCells(start, dest);
-                    MusicPlayer.playMoveSFX();
-                    repaint();
+                    startX = e.getX();
+                    startY = e.getY();
                 }
 
-                startX = -1;
-                startY = -1;
-            }
-        });
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    super.mouseReleased(e);
+
+                    Point start = coordToCell(new Point(startX, startY));
+                    Point dest = coordToCell(new Point(e.getX(), e.getY()));
+
+                    if (validMove(start, dest)) {
+                        swapCells(start, dest);
+                        MusicPlayer.playMoveSFX();
+                        repaint();
+                    }
+
+                    startX = -1;
+                    startY = -1;
+                }
+            };
+            addMouseListener(mouse_controls);
+        }
+
     }
     private boolean validMove(Point start, Point dest) {
         System.out.println("Start:");

@@ -1,6 +1,8 @@
-/*
-    Name: AppFrame.java
-    Purpose: Acts as the controller of the program.
+/**
+ * AppFrame.java
+ * by Tobin Nickels,
+ *
+ * This class contains all of the panels and menu items used in Sliding David.
  */
 
 import javax.imageio.ImageIO;
@@ -10,20 +12,23 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class AppFrame extends JFrame {
     private final SidePanel sidePanel;
+    private GamePanel gamePanel;
     private final Picture picture;
     private PictureFrame picFrame;
     private PastScoresFrame hScoreFrame;
+    private SetKeyFrame popup;
 
     public AppFrame(){
         setLayout(null);
         setTitle("Sliding David Puzzle");
 
         picture = new Picture();
-        GamePanel gamePanel = new GamePanel(picture);
+        gamePanel = new GamePanel(picture);
         sidePanel = new SidePanel(gamePanel);
         add(gamePanel);
         add(sidePanel);
@@ -81,6 +86,74 @@ public class AppFrame extends JFrame {
         });
         menuView.add(menuViewFullImage);
         menuBar.add(menuView);
+
+        // Menu related to movement settings
+        JMenu menuSetting = new JMenu("Settings");
+
+        // Switch to using the mouse
+        JMenuItem menuUseMouse = new JMenuItem("Use Mouse");
+        menuUseMouse.addActionListener(e ->{
+            gamePanel.turnOnMouse();
+        });
+        menuSetting.add(menuUseMouse);
+
+        // Switch to using keyboard
+        JMenuItem menuUseKeyboard = new JMenuItem("Use Keyboard");
+        menuUseKeyboard.addActionListener(e ->{
+            gamePanel.turnOnKeyboard();
+        });
+        menuSetting.add(menuUseKeyboard);
+
+        // Set key bindings to arrow keys.
+        JMenuItem menuResetKeybindings = new JMenuItem("Reset Keybindings");
+        menuResetKeybindings.addActionListener(e->{
+            gamePanel.setDirection("left",37);
+            gamePanel.setDirection("up",38);
+            gamePanel.setDirection("right",39);
+            gamePanel.setDirection("dowon",40);
+        });
+        menuSetting.add(menuResetKeybindings);
+
+        // Bind directions to a custom key.
+        JMenuItem menuSetLeft = new JMenuItem("Set Left");
+        menuSetLeft.addActionListener(e ->
+        {
+            if(popup != null){
+                popup.dispose();
+            }
+            popup = new SetKeyFrame("left",gamePanel);
+        });
+        JMenuItem menuSetUp = new JMenuItem("Set Up");
+        menuSetUp.addActionListener(e ->
+        {
+            if(popup != null){
+                popup.dispose();
+            }
+            popup = new SetKeyFrame("up",gamePanel);
+        });
+        JMenuItem menuSetRight = new JMenuItem("Set Right");
+        menuSetRight.addActionListener(e ->
+        {
+            if(popup != null){
+                popup.dispose();
+            }
+            popup = new SetKeyFrame("right",gamePanel);
+        });
+        JMenuItem menuSetDown = new JMenuItem("Set Down");
+        menuSetDown.addActionListener(e ->
+        {
+            if(popup != null){
+                popup.dispose();
+            }
+            popup = new SetKeyFrame("down",gamePanel);
+        });
+        menuSetting.add(menuSetLeft);
+        menuSetting.add(menuSetUp);
+        menuSetting.add(menuSetRight);
+        menuSetting.add(menuSetDown);
+        menuBar.add(menuSetting);
+
+
         /*
          * This checks if an insane score of 30mins or less has been achieved
          * if so, then a new, secret menu option is added.
