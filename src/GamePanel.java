@@ -107,38 +107,63 @@ public class GamePanel extends JPanel {
     }
 
     private void generatePuzzle() {
-        ArrayList<Integer> randomizer = new ArrayList<>();
-        for (int i = 0; i < (n * n - 1); i++)
-            randomizer.add(i);
+        new Thread(() -> {
+            ArrayList<Integer> randomizer = new ArrayList<>();
+            for (int i = 0; i < (n * n - 1); i++)
+                randomizer.add(i);
 
-        Random rand = new Random();
-        for (int i = 0; i < nrOfSwaps; i++) {
-            int a = rand.nextInt(n * n - 1);
-            int b = a;
-            while (b == a)
-                b = rand.nextInt(n * n - 1);
-
-            int t = randomizer.get(a);
-            randomizer.set(a, randomizer.get(b));
-            randomizer.set(b, t);
-        }
-
-        cells = new Vector<>();
-        cells.setSize(n);
-        int next = 0;
-        for (int i = 0; i < n; i++) {
-            cells.set(i, new Vector<>());
-            cells.get(i).setSize(n);
-            for (int j = 0; j < n; j++) {
-                if (i == n - 1 && j == n - 1){
-                    cells.get(i).set(j, -1);
-                    empty_cell = new Point(j,i);
-            } else {
-                    cells.get(i).set(j, randomizer.get(next));
-                    next++;
+            cells = new Vector<>();
+            cells.setSize(n);
+            int next = 0;
+            for (int i = 0; i < n; i++) {
+                cells.set(i, new Vector<>());
+                cells.get(i).setSize(n);
+                for (int j = 0; j < n; j++) {
+                    if (i == n - 1 && j == n - 1)
+                        cells.get(i).set(j, -1);
+                    else {
+                        cells.get(i).set(j, randomizer.get(next));
+                        next++;
+                    }
                 }
             }
-        }
+            Random rand = new Random();
+            for (int i = 0; i < nrOfSwaps; i++) {
+                int a = rand.nextInt(n * n - 1);
+                int b = a;
+                while (b == a)
+                    b = rand.nextInt(n * n - 1);
+
+                int t = randomizer.get(a);
+                randomizer.set(a, randomizer.get(b));
+                randomizer.set(b, t);
+                next = 0;
+                for (int j = 0; j < n; j++) {
+                    cells.set(j, new Vector<>());
+                    cells.get(j).setSize(n);
+                    for (int k = 0; k < n; k++) {
+                        if (j == n - 1 && k == n - 1)
+                            cells.get(j).set(k, -1);
+                        else {
+                            cells.get(j).set(k, randomizer.get(next));
+                            next++;
+                        }
+                    }
+                }
+                repaint();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        }).start();
+
+
+
+
+
     }
     /*
     Returns an Vector<Integer> of 4 elements, each representing a move, and the
