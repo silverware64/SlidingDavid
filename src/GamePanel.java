@@ -241,9 +241,6 @@ public class GamePanel extends JPanel {
         if(mouse_controls != null){
             removeMouseListener(mouse_controls);
         }
-        if (keyboard_controls != null){
-            removeKeyListener(keyboard_controls);
-        }
         use_keyboard = true;
         if(gameState == 2)
             gamePhase();
@@ -255,9 +252,6 @@ public class GamePanel extends JPanel {
     public void turnOnMouse(){
         if (keyboard_controls != null){
             removeKeyListener(keyboard_controls);
-        }
-        if(mouse_controls != null){
-            removeMouseListener(mouse_controls);
         }
         use_keyboard = false;
         if(gameState == 2)
@@ -327,7 +321,6 @@ public class GamePanel extends JPanel {
 
                     if (validMove(start, dest)) {
                         swapCells(start, dest);
-                        empty_cell = start;
                         MusicPlayer.playMoveSFX();
                         repaint();
                     }
