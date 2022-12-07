@@ -1,5 +1,8 @@
-/*
-    Name: TimeController.java
+/**
+ *  TimeController.java
+ *
+ *  Runnable to contains a Stopwatch object, and
+ *  references to game panel and side panel.
  */
 
 import javax.swing.*;

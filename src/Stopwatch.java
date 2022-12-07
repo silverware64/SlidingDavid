@@ -1,6 +1,5 @@
 /*
-    Name: Stopwatch.java
-    Contains methods to calculate time
+ *   Name: Stopwatch.java
  */
 public class Stopwatch {
     private long start;
