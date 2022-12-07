@@ -1,5 +1,6 @@
 /*
     Name: Picture.java
+    Contains the logic for dividing images into game tiles and saves them for drawing
  */
 
 import java.awt.*;

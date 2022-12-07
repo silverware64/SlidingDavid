@@ -1,5 +1,6 @@
 /*
     Name: Scores.java
+    Keeps track of and updates score text files
  */
 
 import java.io.*;

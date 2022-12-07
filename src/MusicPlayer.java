@@ -4,6 +4,7 @@ import java.io.File;
 /**
  *  Contains static methods to play the game background music and the puzzle move sound effect
  */
+
 public class MusicPlayer {
     public static void playBGmusic(){
         try {
@@ -20,7 +21,7 @@ public class MusicPlayer {
     }
 
     public static void playMoveSFX(){
-        try{
+        try {
             AudioInputStream moveStream = AudioSystem.getAudioInputStream(new File("Sounds/woosh.wav").getAbsoluteFile());
             Clip moveClip = AudioSystem.getClip();
             moveClip.open(moveStream);

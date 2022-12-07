@@ -1,5 +1,6 @@
 /*
     Name: SidePanel.java
+    Displays the side menu, scores, and buttons
  */
 
 import javax.swing.*;

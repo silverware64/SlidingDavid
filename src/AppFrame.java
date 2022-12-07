@@ -1,6 +1,6 @@
 /**
  * AppFrame.java
- * by Tobin Nickels,
+ * by Tobin Nickels, Nicholas Bell, Chris Fleming
  *
  * This class contains all of the panels and menu items used in Sliding David.
  */
