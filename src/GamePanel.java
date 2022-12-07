@@ -326,6 +326,9 @@ public class GamePanel extends JPanel {
                         repaint();
                     }
 
+                    if(gameOver()){
+                        gameState = 3;
+                    }
                     startX = -1;
                     startY = -1;
                 }
