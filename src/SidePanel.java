@@ -213,6 +213,7 @@ public class SidePanel extends JPanel {
         Scores.addScore(currentScore.getText(), getSelectedDifficulty());
         lastScore.setText(currentScore.getText());
         hsScore.setText(Scores.getHighScore(getSelectedDifficulty()));
+        new WinFrame();
     }
 
     public void updateScoreFiles() {
