@@ -1,5 +1,5 @@
 /*
-    Name: PictureFrame.java
+ * Frame used to display the full image of current puzzle.
  */
 
 import javax.swing.*;

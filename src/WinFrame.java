@@ -1,3 +1,9 @@
+/**
+ * WinFrame.java
+ *
+ * Frame that appears when you complete a puzzle.
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.jar.JarFile;

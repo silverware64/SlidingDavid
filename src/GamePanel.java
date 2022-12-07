@@ -1,6 +1,5 @@
 /**
  * GamePanel.java
- * by Tobin Nickels,
  *
  * This class is responsible for game logic, event listeners, and displaying graphics of the tiles.
  */

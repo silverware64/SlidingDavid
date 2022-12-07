@@ -1,5 +1,7 @@
 /*
-    Name: Picture.java
+ * Picture.java
+ *
+ *
  */
 
 import java.awt.*;

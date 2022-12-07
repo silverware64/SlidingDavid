@@ -1,5 +1,7 @@
 /*
-    Name: Scores.java
+ * Scores.java
+ *
+ * Class used to update .txt documents containing scores, and pull high scores from .txt document.
  */
 
 import java.io.*;

@@ -1,5 +1,7 @@
 /*
-    Name: PastScores.java
+ *   PastScores.java
+ *
+ * Frame to display past score for current difficulty.
  */
 
 import javax.swing.*;
