@@ -142,7 +142,7 @@ public class GamePanel extends JPanel {
                     cells.set(j, new Vector<>());
                     cells.get(j).setSize(n);
                     for (int k = 0; k < n; k++) {
-                        if (j == n - 1 && k == n - 1)
+                        if (j == n - 1 && k == n - 1) {
                             cells.get(j).set(k, -1);
                             empty_cell = new Point(j, k);
                         }

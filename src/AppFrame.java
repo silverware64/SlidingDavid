@@ -110,7 +110,7 @@ public class AppFrame extends JFrame {
             gamePanel.setDirection("left",37);
             gamePanel.setDirection("up",38);
             gamePanel.setDirection("right",39);
-            gamePanel.setDirection("dowon",40);
+            gamePanel.setDirection("down",40);
         });
         menuSetting.add(menuResetKeybindings);
 
