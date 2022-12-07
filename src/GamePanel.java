@@ -144,6 +144,8 @@ public class GamePanel extends JPanel {
                     for (int k = 0; k < n; k++) {
                         if (j == n - 1 && k == n - 1)
                             cells.get(j).set(k, -1);
+                            empty_cell = new Point(j, k);
+                        }
                         else {
                             cells.get(j).set(k, randomizer.get(next));
                             next++;
