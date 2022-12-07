@@ -1,5 +1,6 @@
 /*
  *   Name: Stopwatch.java
+ *  Calculates the time elapsed since the Stopwatch was instantiated
  */
 public class Stopwatch {
     private long start;
